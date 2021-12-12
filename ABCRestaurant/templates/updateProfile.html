@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Library Loan System - Update Profile{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<style>
+.profpic {
+	position: relative;
+    height: 100px;
+    width: 100px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin: 3px;
+    display: flex;
+    justify-content: center;
+}
+img {
+    display: block;
+    margin: 0 auto;
+    height: 100%;
+    width: auto;
+}
+</style>
+
+<h1 class="display-4">Update Profile</h1>
+<form method="POST" action="" enctype="multipart/form-data">
+  <div class="container">
+    <div class="form-group">
+      <label for="avatar">Current Profile Picture:</label><br>
+      <div class="profpic">
+        <img src= "/static/img/avatars/{{profile_pic}}">
+      </div>
+      <input type="file" name="avatar">
+      {% if fileTypeError %}
+      <p style="color:red;">{{fileTypeError}}</p>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.first_name, class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.last_name, class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.gender, class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.email, class="form-control") }}
+      {% if emailError %}
+      <p style="color: red;">{{ emailError }}</p>
+      {% endif %}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.password, class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.confirm, class="form-control") }}
+    </div>
+    <div class="form-group">
+			<label for = "question">enable security question</label>
+			<a href="/security_question/{{user_id}}/">security question</a>
+    </div>
+    <div class="btn-holder">
+      <input type="submit" value="Update" class="btn btn-primary"/>
+    </div>
+  </div>
+</form>
+{% endblock %}
+
+
+
+
+
+
+<!--<h1 class="display-4">Update User</h1>-->
+
+<!--<form method="POST" action="">-->
+<!--  <div class="container">-->
+<!--    <div class="form-group">-->
+<!--      {{ render_field(form.first_name, class="form-control") }}-->
+<!--    </div>-->
+<!--    <div class="form-group">-->
+<!--      {{ render_field(form.last_name, class="form-control") }}-->
+<!--    </div>-->
+<!--    <div class="form-group">-->
+<!--      {{ render_field(form.gender, class="form-control") }}-->
+<!--    </div>-->
+<!--    <div class="form-group">-->
+<!--      {{ render_field(form.email, class="form-control") }}-->
+<!--    </div>-->
+<!--    <div id="prof">-->
+<!--      <div class="form-group">-->
+<!--        {{ render_field(form.password, class="form-control") }}-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <input type="submit" value="Submit" class="btn btn-primary"/>-->
+<!--  </div>-->
+<!--</form>-->

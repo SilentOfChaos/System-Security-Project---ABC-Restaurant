@@ -1,0 +1,296 @@
+{% extends "base.html" %}
+{% block title %}Products{% endblock %}
+
+
+{% block content %}
+<style>
+
+
+.card {
+ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+ max-width: 300px;
+ margin: 20px;
+ text-align: center;
+ font-family: arial;
+ display:inline-block;
+}
+
+.price {
+  color: grey;
+  font-size: 22px;
+}
+
+.card button:hover {
+  opacity: 0.7;
+}
+.cart-column {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid black;
+    margin-right: 1.5em;
+    padding-bottom: 10px;
+    margin-top: 10px;
+}
+.cart-header {
+    font-weight: bold;
+    font-size: 1.25em;
+    color: #333;
+}
+.cart-row {
+    display: flex;
+}
+
+.cart-item {
+    width: 45%;
+}
+
+.cart-price {
+    width: 20%;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.cart-quantity {
+    width: 35%;
+}
+
+.cart-item-title {
+    color: #333;
+    margin-left: .5em;
+    font-size: 1.2em;
+}
+
+.cart-item-image {
+    width: 75px;
+    height: auto;
+    border-radius: 10px;
+}
+.btn-danger {
+    color: white;
+    background-color: #EB5757;
+    border: none;
+    border-radius: .3em;
+    font-weight: bold;
+}
+
+.container {
+    max-width: 1405px;
+}
+
+</style>
+<script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule="" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"></script>
+<br><br>
+<div class="container">
+    <h1 style="text-align: center;">Food</h1>
+    {% if 'user_id' in session %}
+         <div class="container">
+            <a href="{{url_for('cart')}}"
+               style="font-size: 1.2em;
+               padding: 5px;
+               border: 1px solid orange;
+               border-radius: 5px;
+               box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);">
+
+                <ion-icon name="cart-outline" style="font-size: 1.3em; transform: translate(0, 5px);"></ion-icon>
+                Your Cart ({{cart_list|length}})
+
+            </a>
+         </div>
+    {% endif %}
+    <div class="card">
+      <img src="../static/img/foodimage1.jpg" alt="Chicken Kebab" class="shop-item-image" style="width:100%">
+      <h1 class="shop-item-title">Chicken Kebab</h1>
+      <p class="shop-item-price">$4.50</p>
+      <p>Meat...on a stick?</p>
+        <form action="{{ url_for('add_to_cart') }}" method="post" style="display:inline-block;">
+            <input type="hidden" name="product_id" value="CknKb">
+            <input type="hidden" name="product_name" value="Chicken Kebab">
+            <input type="hidden" name="price" value="4.50">
+            <label for="1">Quantity:</label>
+            <input type="number" name="quantity" id="1" value="1" min="1">
+            {% if 'user_id' in session %}
+            <input type="submit" class="btn btn-primary shop-item-button" value="Add To Cart">
+            {% endif %}
+        </form>
+        {% if 'user_id' not in session %}
+        <div style="text-align: center;">
+            <a href="/login"><button class="btn btn-primary shop-item-button">Add To Cart</button></a>
+        </div>
+        {% endif %}
+
+        <a href="{{ url_for('review', product_id='CknKb') }}"><button class="btn btn-secondary" type="button" style="margin: 5px;">Review</button></a>
+    </div>
+    <div class="card">
+      <img src="../static/img/chickenrice.jpg" alt="Chicken Rice" class="shop-item-image" style="width:100%; height: 189px;">
+      <h1 class="shop-item-title">Chicken Rice</h1>
+      <p class="shop-item-price">$6.50</p>
+      <p>Because every restaurant has it.</p>
+        <form action="{{ url_for('add_to_cart') }}" method="post">
+            <input type="hidden" name="product_id" value="CknRc">
+            <input type="hidden" name="product_name" value="Chicken Rice">
+            <input type="hidden" name="price" value="6.50">
+            <label for="2">Quantity:</label>
+            <input type="number" name="quantity" id="2" value="1" min="1">
+            {% if 'user_id' in session %}
+            <input type="submit" class="btn btn-primary shop-item-button" value="Add To Cart">
+            {% endif %}
+        </form>
+        {% if 'user_id' not in session %}
+        <div style="text-align: center;">
+            <a href="/login"><button class="btn btn-primary shop-item-button">Add To Cart</button></a>
+        </div>
+        {% endif %}
+        <a href="{{ url_for('review', product_id='CknRc') }}"><button class="btn btn-secondary" type="button" style="margin: 5px;">Review</button></a>
+    </div>
+    <div class="card">
+      <img src="../static/img/nasilemak.jpeg" alt="Nasi Lemak" class="shop-item-image" style="width:298px; height: 189px;">
+      <h1 class="shop-item-title">Nasi Lemak</h1>
+      <p class="shop-item-price">$5.00</p>
+      <p>Totally not a dish stolen from Malaysia.</p>
+        <form action="{{ url_for('add_to_cart') }}" method="post">
+            <input type="hidden" name="product_id" value="NsLmk">
+            <input type="hidden" name="product_name" value="Nasi Lemak">
+            <input type="hidden" name="price" value="5.00">
+            <label for="3">Quantity:</label>
+            <input type="number" name="quantity" id="3" value="1" min="1">
+            {% if 'user_id' in session %}
+            <input type="submit" class="btn btn-primary shop-item-button" value="Add To Cart">
+            {% endif %}
+        </form>
+        {% if 'user_id' not in session %}
+        <div style="text-align: center;">
+            <a href="/login"><button class="btn btn-primary shop-item-button">Add To Cart</button></a>
+        </div>
+        {% endif %}
+        <a href="{{ url_for('review', product_id='NsLmk') }}"><button class="btn btn-secondary" type="button" style="margin: 5px;">Review</button></a>
+    <!--  <p><button class="btn btn-primary shop-item-button" type="button">Add to Cart</button></p>-->
+    </div>
+    <div class="card">
+      <img src="../static/img/rotiprata.jfif" alt="Roti Prata" class="shop-item-image" style="width:298px; height: 189px;">
+      <h1 class="shop-item-title">Roti Prata</h1>
+      <p class="shop-item-price">$1.50</p>
+      <p>Good combo with Teh Tarik.</p>
+        <form action="{{ url_for('add_to_cart') }}" method="post">
+            <input type="hidden" name="product_id" value="RtPrata">
+            <input type="hidden" name="product_name" value="Roti Prata">
+            <input type="hidden" name="price" value="1.50">
+            <label for="4">Quantity:</label>
+            <input type="number" name="quantity" id="4" value="1" min="1">
+            {% if 'user_id' in session %}
+            <input type="submit" class="btn btn-primary shop-item-button" value="Add To Cart">
+            {% endif %}
+        </form>
+        {% if 'user_id' not in session %}
+        <div style="text-align: center;">
+            <a href="/login"><button class="btn btn-primary shop-item-button">Add To Cart</button></a>
+        </div>
+        {% endif %}
+        <a href="{{ url_for('review', product_id='RtPrata') }}"><button class="btn btn-secondary" type="button" style="margin: 5px;">Review</button></a>
+    <!--  <p><button class="btn btn-primary shop-item-button" type="button">Add to Cart</button></p>-->
+    </div>
+
+
+    <br><br><br>
+    <h1 style="text-align: center;">Beverages</h1>
+    <div class="card">
+      <img src="../static/img/water.jpg" alt="Water" class="shop-item-image" style="width:140px; height: 189px;">
+      <h1 class="shop-item-title">Water</h1>
+      <p class="shop-item-price">$0.50</p>
+      <p>Yeah. Water.</p>
+        <form action="{{ url_for('add_to_cart') }}" method="post">
+            <input type="hidden" name="product_id" value="Water">
+            <input type="hidden" name="product_name" value="Water">
+            <input type="hidden" name="price" value="0.50">
+            <label for="5">Quantity:</label>
+            <input type="number" name="quantity" id="5" value="1" min="1">
+            {% if 'user_id' in session %}
+            <input type="submit" class="btn btn-primary shop-item-button" value="Add To Cart">
+            {% endif %}
+        </form>
+        {% if 'user_id' not in session %}
+        <div style="text-align: center;">
+            <a href="/login"><button class="btn btn-primary shop-item-button">Add To Cart</button></a>
+        </div>
+        {% endif %}
+        <a href="{{ url_for('review', product_id='Water') }}"><button class="btn btn-secondary" type="button" style="margin: 5px;">Review</button></a>
+    <!--  <p><button class="btn btn-primary shop-item-button" type="button">Add to Cart</button></p>-->
+    </div>
+    <div class="card">
+      <img src="../static/img/TehTarik.jpg" alt="Teh Tarik" class="shop-item-image" style="width:298px; height: 189px;">
+      <h1 class="shop-item-title">Teh Tarik</h1>
+      <p class="shop-item-price">$1.50</p>
+      <p>Pathway to Diabetes</p>
+        <form action="{{ url_for('add_to_cart') }}" method="post">
+            <input type="hidden" name="product_id" value="TehTarik">
+            <input type="hidden" name="product_name" value="Teh Tarik">
+            <input type="hidden" name="price" value="1.50">
+            <label for="6">Quantity:</label>
+            <input type="number" name="quantity" id="6" value="1" min="1">
+            {% if 'user_id' in session %}
+            <input type="submit" class="btn btn-primary shop-item-button" value="Add To Cart">
+            {% endif %}
+        </form>
+        {% if 'user_id' not in session %}
+        <div style="text-align: center;">
+            <a href="/login"><button class="btn btn-primary shop-item-button">Add To Cart</button></a>
+        </div>
+        {% endif %}
+        <a href="{{ url_for('review', product_id='TehTarik') }}"><button class="btn btn-secondary" type="button" style="margin: 5px;">Review</button></a>
+    <!--  <p><button class="btn btn-primary shop-item-button" type="button">Add to Cart</button></p>-->
+    </div>
+    <div class="card">
+        <div style="width:298px;height:189px;">
+            <img src="../static/img/cola.gif" alt="Iced Cola" class="shop-item-image" style="width: 298px; height: 189px;">
+        </div>
+
+      <h1 class="shop-item-title">Iced Cola</h1>
+      <p class="shop-item-price">$2.00</p>
+      <p>Pepsi or Coca-cola? You'll never know.</p>
+        <form action="{{ url_for('add_to_cart') }}" method="post">
+            <input type="hidden" name="product_id" value="IcedCola">
+            <input type="hidden" name="product_name" value="Iced Cola">
+            <input type="hidden" name="price" value="2.00">
+            <label for="7">Quantity:</label>
+            <input type="number" name="quantity" id="7" value="1" min="1">
+            {% if 'user_id' in session %}
+            <input type="submit" class="btn btn-primary shop-item-button" value="Add To Cart">
+            {% endif %}
+        </form>
+        {% if 'user_id' not in session %}
+        <div style="text-align: center;">
+            <a href="/login"><button class="btn btn-primary shop-item-button">Add To Cart</button></a>
+        </div>
+        {% endif %}
+        <a href="{{ url_for('review', product_id='IcedCola') }}"><button class="btn btn-secondary" type="button" style="margin: 5px;">Review</button></a>
+    <!--  <p><button class="btn btn-primary shop-item-button" type="button">Add to Cart</button></p>-->
+    </div>
+    <div class="card">
+      <img src="../static/img/anw.jpg" alt="A&W" class="shop-item-image" style="width:auto; height: 189px;">
+      <h1 class="shop-item-title">A&W Root Beer</h1>
+      <p class="shop-item-price">$2.00</p>
+      <p>Check out their restaurant, too.</p>
+        <form action="{{ url_for('add_to_cart') }}" method="post">
+            <input type="hidden" name="product_id" value="anw">
+            <input type="hidden" name="product_name" value="A&W">
+            <input type="hidden" name="price" value="2.00">
+            <label for="8">Quantity:</label>
+            <input type="number" name="quantity" id="8" value="1" min="1">
+            {% if 'user_id' in session %}
+            <input type="submit" class="btn btn-primary shop-item-button" value="Add To Cart">
+            {% endif %}
+        </form>
+        {% if 'user_id' not in session %}
+        <div style="text-align: center;">
+            <a href="/login"><button class="btn btn-primary shop-item-button">Add To Cart</button></a>
+        </div>
+        {% endif %}
+        <a href="{{ url_for('review', product_id='anw') }}"><button class="btn btn-secondary" type="button" style="margin: 5px;">Review</button></a>
+    <!--  <p><button class="btn btn-primary shop-item-button" type="button">Add to Cart</button></p>-->
+    </div>
+
+</div>
+
+
+
+{% endblock %}

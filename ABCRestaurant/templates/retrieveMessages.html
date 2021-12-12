@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block title %}Retrieve Messages{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+{% if replysent %}
+<div class="alert alert-success alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  Reply successfully sent.
+</div>
+{% endif %}
+
+{% if 'message_deleted' in session %}
+<div class="alert alert-danger alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  Message #{{ session.pop('message_deleted', None) }} was deleted.
+</div>
+{% endif %}
+
+<h1 class="display-4">Retrieve Messages</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no messages.</p>
+  {% elif count == 1 %}
+  <p>There is 1 message.</p>
+  {% else %}
+  <p>There are {{ count }} messages.</p>
+  {% endif %}
+</div>
+
+<div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Message ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Subject</th>
+        <th>Enquiry</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for message in messages_list %}
+      <tr>
+        <td>{{ message.get_message_id() }}</td>
+        <td>{{ message.get_first_name() }}</td>
+        <td>{{ message.get_last_name() }}</td>
+        <td>{{ message.get_email() }}</td>
+        <td>{{ message.get_subject() }}</td>
+        <td>{{ message.get_enquiry() }}</td>
+        <td>
+
+          <!-- Trigger the modal with a button -->
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reply_{{message.get_message_id()}}">
+            Reply
+          </button>
+
+          <!-- Modal -->
+          <div id="reply_{{message.get_message_id()}}" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Reply to Enquiry</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                  <form id="replyForm" action="{{ url_for('retrieve_messages') }}" method=post>
+                    <label for="recipient"><strong>Recipient:</strong></label>
+                    <input type="text" name="recipient"
+                           value="{{ message.get_first_name() }} {{ message.get_last_name() }}" readonly
+                           style="border: none; width: 75%;">
+                    <label for="email"><strong>Email:</strong></label>
+                    <input type="text" name="email"
+                           value="{{ message.get_email() }}" readonly
+                           style="border: none; width: 75%;">
+                    <br>
+                    <label for="subject"><strong>Subject:</strong></label>
+                    <input type="text" name="subject" value="RE: {{ message.get_subject() }}" readonly style="border: none; width: 75%;">
+                    <br>
+                    <label for="reply"><strong>Message:</strong></label><br>
+                    <textarea name="reply" id="reply" rows="5" cols="50" placeholder="Enter reply here..." required></textarea>
+                    <input type="submit" value="Send Reply" class="btn btn-primary">
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </td>
+        <td>
+
+          <form action="{{ url_for('delete_message', id=message.get_message_id()) }}" method="POST">
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{message.get_message_id()}}">
+                  Delete
+                </button>
+
+                <!-- The Modal -->
+                <div class="modal" id="myModal_{{message.get_message_id()}}">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+
+                      <!-- Modal Header -->
+                      <div class="modal-header">
+                        <h4 class="modal-title">Delete Confirmation</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      </div>
+
+                      <!-- Modal body -->
+                      <div class="modal-body">
+                        Are you sure you want to delete Message #{{message.get_message_id()}}?
+                      </div>
+
+                      <!-- Modal footer -->
+                      <div class="modal-footer">
+                        <input type="submit" value="Delete" class="btn btn-danger">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

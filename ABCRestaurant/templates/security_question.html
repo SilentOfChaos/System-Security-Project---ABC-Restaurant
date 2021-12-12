@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}ABC Restaurant - Create User{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<style>
+  form {border: 5px solid #f1f1f1; width: 80%; height: 100%; display: in-block; padding: 20px 40px; margin: auto;}
+  .form-group {width: 100%;}
+  .container {padding: 20px 60px;}
+  .btn-holder{text-align: center;}
+
+</style>
+
+<h1 style="text-align: center">Register</h1>
+<form id = "form" method = "post">
+
+  <input type="hidden" name="user_id" value="{{user_id}}">
+  <input type="submit" value="Register" class="btn btn-primary" style="width: 40%"/>
+</form>
+
+
+<script>
+  var test = {{question | safe }};
+  const test2 = {{answer | safe }};
+  const lists = {};
+  window.onload = create_security_question(test,test2,lists);
+
+
+  function create_security_question(test,test2,lists){
+  console.log(test2);
+  for (var f = 1; f < 4; f++){
+  var name = "question " + f
+  var name_2 = "answer " + f
+  var form = document.getElementById('form')
+
+
+  var div = document.createElement("div");
+  var dropdown = document.createElement("select");
+  dropdown.name = name;
+  dropdown.id = name;
+  dropdown.addEventListener("change",function() {check_security_question(event,lists)});
+
+
+  var label = document.createElement("label");
+  label.for = name;
+  var text = document.createTextNode(name);
+  label.appendChild(text);
+
+  var input = document.createElement("input")
+  input.type = "text";
+  input.name = name_2;
+
+  var error_message = document.createElement("div")
+  error_message.id = "error on" + name;
+
+  var idk = 0;
+  for (i in test){
+    var option = document.createElement("option");
+    option.value = test[i]["question_id"];
+    option.id = name +"_"+test[i]["question_id"];
+
+    if (idk == 0 && Object.keys(test2).length == 0 && !(Object.values(lists).includes(test[i]["question_id"]))){
+        option.selected = true;
+        lists[name] = test[i]["question_id"];
+        idk += 1;
+       }
+    else if (idk == 0 && test[i]["question_id"] in test2){
+        option.selected = true;
+        input.value = test2[test[i]["question_id"]];
+        lists[name] = test[i]["question_id"];
+        delete test2[test[i]["question_id"]];
+        idk += 1;
+    }
+    var text = document.createTextNode(test[i]["question"]);
+    option.appendChild(text);
+    dropdown.appendChild(option);
+
+  }
+
+  var form = document.getElementById('form')
+  div.appendChild(error_message);
+  div.appendChild(label);
+  div.appendChild(dropdown);
+  div.appendChild(input);
+
+  form.appendChild(div);
+  }
+}
+
+function check_security_question(e,list){
+    var id = e["target"].id;
+    var value = parseInt(document.getElementById(id).value);
+
+    var error = document.getElementById( "error on" + id);
+    error.innerHTML = "";
+
+
+    console.log(list)
+    if (Object.values(list).includes(value)){
+      console.log(id + "_" + list[id]);
+      var test = document.getElementById(id + "_" + list[id]);
+      test.selected = true;
+      var text = document.createTextNode("error cannot have same question");
+      text.color = 'red';
+      error.appendChild(text);
+    }
+    else{
+      console.log("no error");
+      list[id] = value
+      console.log(list)
+    }
+}
+
+
+
+</script>
+<br><br>
+{% endblock %}

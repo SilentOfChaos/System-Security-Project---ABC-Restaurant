@@ -1,0 +1,345 @@
+{% extends "base.html" %}
+{% block title %}Report Generation{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<head>
+    <meta charset="UTF-8">
+    <title>Report Generation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<style>
+    #height {height:1000px;}
+select{width:40%}
+</style>
+
+<div id="height" style="margin-top: 100px" align="center">
+  <form method="POST" action="" style="display: inline;width:90%;">
+      {{ render_field(form.value) }}
+    <input type="submit" value="Retrieve"/>
+
+  </form>
+<!--    <button onclick="show()" style="margin-left: 20%" id="graphButton">Graph</button>-->
+    {% if option == "Review Ratings" %}
+    <div class="retrievedTable">
+        <TABLE BORDER="5" CELLPADDING="10" CELLSPACING="5" style="margin: 50px auto 0px auto; width: 80%;">
+            <TR align="center">
+              <TH COLSPAN="5">
+                 <H3><BR>Review Ratings</H3>
+              </TH>
+           </TR>
+            <TR align="Center">
+              <TH>1 Star</TH>
+              <TH>2 Star</TH>
+              <TH>3 Star</TH>
+              <TH>4 Star</TH>
+              <TH>5 Star</TH>
+            </TR>
+              <TR align="Center">
+              <TD>{{countlist[0]}}</TD>
+              <TD>{{countlist[1]}}</TD>
+              <TD>{{countlist[2]}}</TD>
+              <TD>{{countlist[3]}}</TD>
+              <TD>{{countlist[4]}}</TD>
+              </TR>
+        </TABLE>
+    </div>
+
+
+    {% elif option == "Customer Transaction History" %}
+    <div class="retrievedTable">
+        <TABLE BORDER="5" CELLPADDING="10" CELLSPACING="5" style="margin: 50px auto 0px auto; width: 80%;">
+            <TR align="center">
+              <TH COLSPAN="6">
+                 <H3><BR>Customer Transaction History</H3>
+              </TH>
+           </TR>
+            <TR align="Center">
+              <TH>Customers</TH>
+              <TH>Transaction ID</TH>
+              <TH>Transaction Date</TH>
+              <TH>Product ID</TH>
+              <TH>Transaction Amount</TH>
+              <TH>Payment Method</TH>
+            </TR>
+              <TR align="Center">
+              <TD>Data</TD>
+              <TD>Data</TD>
+              <TD>Data</TD>
+              <TD>Data</TD>
+              <TD>Data</TD>
+              <TD>Data</TD>
+              </TR>
+        </TABLE>
+    </div>
+    {% elif option == "Total Amount" %}
+    <div class="retrievedTable">
+        <TABLE BORDER="5"  CELLPADDING="10" CELLSPACING="5" style="margin: 50px auto 0px auto; width: 80%;">
+        <TR align="center">
+          <TH COLSPAN="3">
+             <H3><BR>Total Amount</H3>
+          </TH>
+       </TR>
+        <TR align="Center">
+          <TH>Customers</TH>
+          <TH>Total Transaction amt</TH>
+          <TH>Total amount</TH>
+        </TR>
+          <TR align="Center">
+          <TD>Data</TD>
+          <TD>Data</TD>
+          <TD>Data</TD>
+          </TR>
+        </TABLE>
+    </div>
+    {% elif option == "Payment Method" %}
+    <div class="retrievedTable">
+        <TABLE BORDER="5"  CELLPADDING="10" CELLSPACING="5" style="margin: 50px auto 0px auto; width: 80%;">
+        <TR align="center">
+          <TH COLSPAN="5">
+             <H3><BR>Payment Method</H3>
+          </TH>
+       </TR>
+        <TR align="Center">
+          <TH>Credit Card</TH>
+          <TH>Mobile Payments</TH>
+          <TH>Bank Transfers</TH>
+          <TH>Cash</TH>
+          <TH>Ewallets</TH>
+        </TR>
+          <TR align="Center">
+          <TD>Data</TD>
+          <TD>Data</TD>
+          <TD>Data</TD>
+          <TD>Data</TD>
+          <TD>Data</TD>
+          </TR>
+        </TABLE>
+    </div>
+    {% elif option == "Logs" %}
+    <div class="retrievedTable">
+        <TABLE BORDER="5"  CELLPADDING="10" CELLSPACING="5" style="margin: 50px auto 0px auto; width: 80%;">
+        <TR align="center">
+          <TH COLSPAN="5">
+             <H3><BR>Logs</H3>
+              <H4 style="text-align:left"><BR>Logins</H4>
+          </TH>
+       </TR>
+        <TR align="Center">
+          <TH>Logs_id</TH>
+          <TH>Id</TH>
+          <TH>Date</TH>
+          <TH>Login</TH>
+          <TH>Logout</TH>
+        </TR>
+            {% for i in logs %}
+                {% if i['failed_login'] == "False"%}
+          <TR align="Center">
+          <TD>{{ i['logs_id'] }}</TD>
+          <TD>{{ i['id'] }}</TD>
+          <TD>{{ i['date'] }}</TD>
+          <TD>{{ i['login'] }}</TD>
+          <TD>{{ i['logout'] }}</TD>
+          </TR>
+                {% endif %}
+            {% endfor %}
+        <tr>
+        <TH COLSPAN="5">
+          <H4 style="text-align:left"><BR>Failed Logins</H4>
+        </TH>
+        </tr>
+        <TR align="Center">
+          <TH>Logs_id</TH>
+          <TH>Id</TH>
+          <TH>Date</TH>
+          <TH>Login</TH>
+          <TH>Logout</TH>
+        </TR>
+            {% for i in logs %}
+                {% if i['failed_login'] == "True"%}
+          <TR align="Center">
+          <TD>{{ i['logs_id'] }}</TD>
+          <TD>{{ i['id'] }}</TD>
+          <TD>{{ i['date'] }}</TD>
+          <TD>{{ i['login'] }}</TD>
+          <TD>{{ i['logout'] }}</TD>
+          </TR>
+                {% endif %}
+            {% endfor %}
+        <TH COLSPAN="5">
+          <H4 style="text-align:left"><BR>Inactive</H4>
+            <button type="button" onclick = "test()" class="btn btn-primary" data-toggle="modal" data-target="#reply_{{ ['logs_id'] }}">Send Email</button>
+        </TH>
+        </tr>
+        <TR align="Center">
+          <TH>ID</TH>
+          <TH>Last Login</TH>
+          <TH>Email</TH>
+          <TH>Full Name</TH>
+          <TH>Gender</TH>
+        </TR>
+            {% for i in inactive %}
+          <TR align="Center">
+          <TD>{{ i['id'] }}</TD>
+          <TD>{{ i['logintime'] }}</TD>
+          <TD>{{ i['email'] }}</TD>
+          <TD>{{ i['fullname'] }}</TD>
+          <TD>{{ i['gender'] }}</TD>
+          </TR>
+            {% endfor %}
+        </TABLE>
+    </div>
+    {% endif %}
+    <div id="graphDiv" style="display: none;">
+        <div class="container" style="width:500px;500px">
+            <canvas id="myChart"></canvas>
+            <canvas id="myChart2"></canvas>
+            <canvas id="myChart3"></canvas>
+        </div>
+        <script>
+            function test(){ window.location.href = "/inactive"; }
+            let mychart = document.getElementById('myChart').getContext('2d');
+
+            Chart.defaults.global.defaultFontFamily = 'Lato';
+            Chart.defaults.global.defaultFontSize = 18;
+            Chart.defaults.global.defaultFontColor = '#777'
+            console.log({{one_star_count}})
+            console.log({{five_star_count}})
+            let massPopChart = new Chart(myChart, {
+                type:'bar',
+                data:{
+                    labels:['1 Star','2 Star', '3 Star', '4 Star', '5 Star'],
+                    datasets:[{
+                        label:'Star Ratings (Chicken Kebab)',
+                        data:[
+                            {{countlist[0]}},
+                            {{countlist[1]}},
+                            {{countlist[2]}},
+                            {{countlist[3]}},
+                            {{countlist[4]}}
+                        ],
+                        backgroundColor:[
+                            'rgba(255, 99, 132, 0.6)',
+                            'rgba(54, 162, 235, 0.6)',
+                            'rgba(255,206,86,0.6)',
+                            'rgba(75,192,192,0.6)',
+                            'rgba(153,102,255,0.6)',
+
+                        ],
+                        borderWidth:1,
+                        borderColor:'#777',
+                        hoverBorderWidth:3,
+                        hoverBorderColor:'#000'
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+
+              });
+            let mychart2 = document.getElementById('myChart2').getContext('2d');
+
+        Chart.defaults.global.defaultFontFamily = 'Lato';
+        Chart.defaults.global.defaultFontSize = 18;
+        Chart.defaults.global.defaultFontColor = '#777'
+
+        let massPopChart2 = new Chart(myChart2, {
+            type:'pie',
+            data:{
+                labels:['Credit Card','Mobile Payments', 'Bank transfers', 'Cash', 'Ewallet'],
+                datasets:[{
+                    label:'Population',
+                    data:[
+                        617594,
+                        181045,
+                        153060,
+                        106519,
+                        105162
+                    ],
+                    backgroundColor:[
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255,206,86,0.6)',
+                        'rgba(75,192,192,0.6)',
+                        'rgba(153,102,255,0.6)',
+                        'rgba(255,159,64,0.6)',
+                        'rgba(255,99,132,0.6)'
+                    ],
+                    borderWidth:1,
+                    borderColor:'#777',
+                    hoverBorderWidth:3,
+                    hoverBorderColor:'#000'
+                }]
+            },
+          });
+          let mychart3 = document.getElementById('myChart3').getContext('2d');
+
+        Chart.defaults.global.defaultFontFamily = 'Lato';
+        Chart.defaults.global.defaultFontSize = 18;
+        Chart.defaults.global.defaultFontColor = '#777'
+
+        let massPopChart3 = new Chart(myChart3, {
+            type:'horizontalBar',
+            data:{
+                labels:['1','2', '3', '4', '5', '6'],
+                datasets:[{
+                    label:'Sales By Product ID',
+                    data:[
+                        617594,
+                        181045,
+                        153060,
+                        106519,
+                        105162,
+                        95072
+                    ],
+                    backgroundColor:[
+                        'rgba(255, 99, 132, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255,206,86,0.6)',
+                        'rgba(75,192,192,0.6)',
+                        'rgba(153,102,255,0.6)',
+                        'rgba(255,159,64,0.6)',
+                        'rgba(255,99,132,0.6)'
+                    ],
+                    borderWidth:1,
+                    borderColor:'#777',
+                    hoverBorderWidth:3,
+                    hoverBorderColor:'#000'
+                }]
+            },
+          });
+    </script>
+
+
+
+    </div>
+<script>
+function show() {
+    var graphDiv = document.getElementById("graphDiv");
+    var otherDivs = document.getElementsByClassName("retrievedTable");
+    if (graphDiv.style.display === "none") {
+        document.getElementById("graphButton").innerHTML = "Table";
+        graphDiv.style.display = "block";
+        for (i=0;i<3;i++) {
+            otherDivs[i].style.display = "none";
+        }
+    } else {
+        document.getElementById("graphButton").innerHTML = "Graph";
+        graphDiv.style.display = "none";
+        for (i=0;i<3;i++) {
+            otherDivs[i].style.display = "block";
+        }
+    }
+}
+</script>
+
+
+
+{% endblock %}

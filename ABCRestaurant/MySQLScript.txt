@@ -1,0 +1,74 @@
+DROP DATABASE IF EXISTS `securityproject`;
+CREATE DATABASE IF NOT EXISTS `SecurityProject` DEFAULT CHARACTER SET utf8 COLLATE
+utf8_general_ci;
+
+USE `SecurityProject`;
+CREATE TABLE IF NOT EXISTS `accounts` (
+`id` int NOT NULL AUTO_INCREMENT,
+`email` varchar(100) NOT NULL,
+`passwords` varchar(255) NOT NULL,
+`fname` varchar(20) NOT NULL,
+`lname` varchar(20) NOT NULL,
+`gender` varchar(10) NOT NULL,
+`avatar` varchar(50) DEFAULT NULL,
+`verifed` varchar(5)  NOT NULL,
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb3;
+
+select * from accounts;
+
+INSERT INTO `accounts` VALUES (1,'admin@gmail.com','$2b$16$Ofj5z/bWDzq.9qd./YVCwu.Mjf1rsRS6ua1kTA0HfyecufZvsz6lK','Admin','Admin','M','default.jpg','True'),
+(2,'xnncndk1234@gmail.com','sha256$QgQCKGOo$7828ec2b5f56369b72708436b626ad2a28d4e5cf0b5637f293e978217009c452','testing','accounts','M','default.jpg','True'),
+(3, 'chngweicong@gmail.com', '$2b$16$Jjb.wudQ55zZQ3XnRukMz.OGqs2feNfdoI9XizlbxfYdqaiDThioG', 'chng', 'wei cong', 'M', 'default.jpg', 'True'),
+(4, 'xnncndk1246@gmail.com', '$2b$16$Jjb.wudQ55zZQ3XnRukMz.OGqs2feNfdoI9XizlbxfYdqaiDThioG', 'test', 'test', 'M', 'default.jpg', 'True');
+
+
+DROP TABLE IF EXISTS `security_question`;
+CREATE TABLE `security_question` (
+  `question_id` int NOT NULL AUTO_INCREMENT,
+  `question` varchar(100) NOT NULL,
+  PRIMARY KEY (`question_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb3;
+
+INSERT INTO `security_question` VALUES (1,'What is your mother\'s maiden name?'),(2,'What is the name of your first pet?'),(3,'What was your first car?'),(4,'What elementary school did you attend?'),(5,'What is the name of the town where you were born?');
+
+
+DROP TABLE IF EXISTS `user_answer`;
+CREATE TABLE `user_answer` (
+  `user_id` int NOT NULL,
+  `question_1` int NOT NULL,
+  `anwser_1` varchar(50) NOT NULL,
+  `question_2` int NOT NULL,
+  `anwser_2` varchar(50) NOT NULL,
+  `question_3` int NOT NULL,
+  `anwser_3` varchar(50) NOT NULL,
+  PRIMARY KEY (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+create VIEW `idk` AS select `idk`.`user_id` AS `user_id`,`idk`.`question_id` AS `question_id`,`security_question`.`question` AS `question`,`idk`.`answer` AS `answer` from ((select `user_answer`.`user_id` AS `user_id`,`user_answer`.`question_1` AS `question_id`,`user_answer`.`anwser_1` AS `answer` from `user_answer` union all select `user_answer`.`user_id` AS `user_id`,`user_answer`.`question_2` AS `question_2`,`user_answer`.`anwser_2` AS `anwser_2` from `user_answer` union all select `user_answer`.`user_id` AS `user_id`,`user_answer`.`question_3` AS `question_3`,`user_answer`.`anwser_3` AS `anwser_3` from `user_answer`) `idk` join `security_question` on((`idk`.`question_id` = `security_question`.`question_id`)));
+
+
+DROP TABLE IF EXISTS `logs`;
+CREATE TABLE `logs` (
+  `logs_id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL,
+  `logintime` datetime NOT NULL,
+  `date` date NOT NULL,
+  `login` time NOT NULL,
+  `logout` time DEFAULT NULL,
+  `failed_login` varchar(5) DEFAULT 'False',
+  PRIMARY KEY (`logs_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+insert into logs values('9', '4', '2020-08-15 15:50:57', '2020-08-15', '15:50:57', '15:51:11', 'False'),
+						('10', '2', '2020-08-15 15:50:57', '2020-08-16', '15:50:57', '15:51:11', 'False'),
+						('11', '3', '2021-08-15 15:50:57', '2021-08-16', '15:50:58', '15:51:11', 'False'),
+                        ('12', '3', '2021-08-15 15:50:57', '2021-08-16', '15:50:58', '15:51:11', 'True');
+
+select * from logs;
+
+SELECT u1.* FROM logs u1
+WHERE u1.logintime = (SELECT MAX(u2.logintime)
+FROM logs u2 WHERE u2.id = u1.id);
+
+SELECT logs.id, logs.logintime, accounts.email,  concat(accounts.fname, ' ',  accounts.lname) fullname from logs inner join accounts on logs.id = accounts.id where TIMESTAMPDIFF(MONTH, logs.logintime, now()) > 3;

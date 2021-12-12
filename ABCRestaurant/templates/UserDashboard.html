@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}ABC Restaurant{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+<style>
+@media screen and (max-width: 1000px){ .table-dashboard {width: auto;}}
+@media screen and (max-width: 600px){ .table-dashboard {width: auto;}}
+</style>
+
+{% if 'user_created' in session %}
+<div class="alert alert-success alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('user_created', None) }} was created.
+</div>
+{% elif 'user_updated' in session %}
+<div class="alert alert-warning alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('user_updated', None) }} was updated.
+</div>
+{% elif 'user_deleted' in session %}
+<div class="alert alert-danger alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('user_deleted', None) }} was deleted.
+</div>
+
+{% endif %}
+<style>
+  .profpic {
+    position: relative;
+    height: 75px;
+    width: 75px;
+    overflow: hidden;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+  }
+  img {
+      display: block;
+      margin: 0 auto;
+      height: 100%;
+      width: auto;
+  }
+</style>
+<h1 style="text-align: center">Retrieve Users</h1>
+<div>
+  {% if count == 0 %}
+  <p>There are no users.</p>
+  {% elif count == 1 %}
+  <p>There is 1 user.</p>
+  {% else %}
+  <p style="text-align: center">There are {{ count }} users.</p>
+
+  {% endif %}
+</div>
+<div class="table-dashboard">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>User ID</th>
+        <th>Profile Picture</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Gender</th>
+        <th>Email</th>
+        <th>Password</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for user in users_list %}
+      <tr>
+        <td>{{ user['id'] }}</td>
+        <td><div class="profpic"><img src="static/img/avatars/{{user['avatar']}}"></div></td>
+        <td>{{ user['fname'] }}</td>
+        <td>{{ user['lname'] }}</td>
+        <td>{{ user['gender'] }}</td>
+        <td>{{ user['email'] }}</td>
+        <td>********</td>
+        <td><a href="/updateUser/{{user['id']}}" class="btn btn-warning">Update</a></td>
+        <td>
+          <form action="{{url_for('delete_user', id=user['id'])}}" method="POST">
+            <!--<input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {#user.get_first_name()#} {#user.get_last_name()#}?');"> -->
+            <!-- Button to Open the Modal -->
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{user['id']}}">
+              Delete
+            </button>
+            <!-- The Modal -->
+            <div class="modal" id="myModal_{{user['id']}}">
+              <div class="modal-dialog">
+                <div class="modal-content">
+
+                  <!-- Modal Header -->
+                  <div class="modal-header">
+                    <h4 class="modal-title">Delete Confirmation</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+
+                  <!-- Modal body -->
+                  <div class="modal-body">
+                    Are you sure you want to delete {{user["fname"]}} {{user["lname"]}}?
+                  </div>
+
+                  <!-- Modal footer -->
+                  <div class="modal-footer">
+                    <input type="submit" value="Delete" class="btn btn-danger">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+

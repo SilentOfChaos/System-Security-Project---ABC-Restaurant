@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}ABC Restaurant - Create User{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+<style>
+  form {border: 5px solid #f1f1f1; width: 80%; height: 100%; display: in-block; padding: 20px 40px; margin: auto;}
+  .form-group {width: 100%;}
+  .container {padding: 20px 60px;}
+  .btn-holder{text-align: center;}
+
+</style>
+
+<h1 style="text-align: center">Register</h1>
+<form method="POST" action="">
+  <div class="container">
+      {% if error %}
+        <p class="error" style="color:red;text-align:center;"><strong>Error:</strong> {{ error }}
+      {% endif %}
+    <div class="form-group">
+      {{ render_field(form.first_name, class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.last_name, class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.gender, class="form-control") }}
+    </div>
+    <div class="form-group">
+      {{ render_field(form.email, class="form-control") }}
+    </div>
+    {% if email_error %}
+        <p class="error" style="color:red;"><strong>Error:</strong> {{ email_error }}
+    {% endif %}
+    <div class="form-group">
+      {{ render_field(form.password, class="form-control") }}
+    </div>
+     {% if error_msg %}
+        {% for i in error_msg %}
+          {% if i == "number" %}
+          <p class="error" style="color:red;">password do not have any number</p>
+          {% endif %}
+          {% if i == "cap" %}
+          <p class="error" style="color:red;">password do not have any capital letter</p>
+          {% endif %}
+          {% if i == "speical" %}
+          <p class="error" style="color:red;">password do not have any special character</p>
+          {% endif %}
+          {% if i == "length" %}
+          <p class="error" style="color:red;">password do not met the minimum</p>
+          {% endif %}
+        {% endfor %}
+    {% endif %}
+    <div class="form-group">
+      {{ render_field(form.confirm, class="form-control") }}
+    </div>
+    <!-- Google Recaptcha -->
+    {{ form.recaptcha() }}
+
+    <div class="form-group">
+      <label for = "question">enable security question</label>
+      <input type="checkbox" id="question" name="security_question" value="security_question">
+    </div>
+
+    <div class="btn-holder">
+      <input type="submit" value="Register" class="btn btn-primary" style="width: 40%"/>
+    </div>
+  </div>
+  <br>
+</form>
+<br><br>
+{% endblock %}

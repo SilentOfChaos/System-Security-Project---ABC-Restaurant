@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}ABC Restaurant - Create User{% endblock %}
+
+{% block content %}
+<style>
+  form {border: 5px solid #f1f1f1; width: 80%; height: 100%; display: in-block; padding: 20px 40px; margin: auto;}
+  .form-group {width: 100%;}
+  .container {padding: 20px 60px;}
+  .btn-holder{text-align: center;}
+
+</style>
+
+<h1 style="text-align: center">Register</h1>
+<form method="POST" action="">
+      {% for i in question %}
+      <div name="form-group">
+      <label for="{{i}}">{{question[i]}}
+      <input type="text" name="{{i}}" value="">
+      {% if i in incorrect %}
+        <p style="color:red;">incorrect, try again</p>
+      {% endif %}
+      </div>
+      {% endfor %}
+      <div class="btn-holder">
+      <input type="submit" value="Register" class="btn btn-primary" style="width: 40%"/>
+    </div>
+  </div>
+  <br>
+</form>
+<br><br>
+{% endblock %}

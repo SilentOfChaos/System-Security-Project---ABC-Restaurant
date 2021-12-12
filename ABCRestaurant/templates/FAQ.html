@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+{% block title %}FAQ{% endblock %}
+
+{% block content %}
+{% from "includes/_formHelper.html" import render_field %}
+
+<!--<link rel="stylesheet" href="/static/css/FAQ.css">-->
+<style>
+/* Style the search field */
+form.example input[type=text] {
+  padding: 10px;
+  font-size: 17px;
+  float: left;
+  width: 80%;
+  border: 1px solid black;
+  border-radius: 7px 0px 0px 7px;
+  background: #f1f1f1;
+}
+
+/* Style the submit button */
+form.example button {
+  float: left;
+  width: 20%;
+  padding: 6px;
+  background: #2196F3;
+  color: white;
+  font-size: 17px;
+  border: 1px solid black;
+  border-left: none; /* Prevent double borders */
+  border-radius: 0px 7px 7px 0px;
+  cursor: pointer;
+}
+
+form.example button:hover {
+  background: #0b7dda;
+}
+
+/* Clear floats */
+form.example::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+
+form::after{
+    padding: 20px;
+}
+
+html{
+    font-family: 'Roboto', sans-serif;
+    font-size: 10px;
+}
+
+section{
+    width: 100%;
+    background-color: #3c4053;
+    display: flex;
+    align-items: center;
+}
+
+.wrapper{
+    width: 100%;
+    max-width: 100rem;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.accordion-item, .accordion>p{
+    background-color: #283042;
+    border-radius: .4rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    box-shadow: .5rem 2px .5rem rgba(0,0,0,.1);
+}
+
+.accordion-link{
+    font-size: 1.6rem;
+    color: rgba(255,255,255,.8);
+    text-decoration: none;
+    background-color: #283042;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+    cursor: pointer
+}
+
+.accordion>p {color: rgba(255,255,255,.6); font-size:1.6em}
+
+ion-icon{
+    padding: .5rem
+}
+
+.accordion-link .up-icon{
+    display: none;
+}
+
+.answer{
+    display: none;
+    position: relative;
+    background-color: #212838;
+    transition: transform ease-out 0.3s;
+}
+
+.answer::before{
+    content: "";
+    position: absolute;
+    width: .6rem;
+    height: 90%;
+    background-color: #8fc460;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.answer p{
+    color: rgba(255,255,255,.6);
+    font-size: 1.4rem;
+    padding: 2rem;
+}
+
+.accordion-item:target .answer{
+    max-height: 20rem;
+}
+
+h1 {
+    color: rgba(255,255,255,.8);
+    text-align: center;
+    font-size: 4em;
+    padding-bottom: 20px;
+}
+</style>
+<script src="/static/js/FAQ.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule="" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+<body>
+    <section>
+        <div class="wrapper">
+            <h1>Frequently Asked Questions</h1>
+            <!-- The form -->
+            <form method="POST" class="example" action="">
+                {{ render_field(form.search) }}
+                <button type="submit"><ion-icon name="search-outline"></ion-icon></button>
+            </form>
+            <div class="accordion">
+                {% if kw=="sell" or kw=="" %}
+                <div class="accordion-item" id="question1">
+                    <a class="accordion-link" onclick="expandQ1()">
+                        What does ABC Restaurant sell?
+                        <ion-icon name="chevron-down-outline" id="down-icon1"></ion-icon>
+                        <ion-icon name="chevron-up-outline" id="up-icon1" style="display: none;"></ion-icon>
+                    </a>
+                    <div class="answer" id="expandQ1" style="display: none;">
+                        <p>We sell all-Singaporean cultural foods, such as Chicken Rice and Nasi Lemak! You can check out the wide variety of foods we offer <a href="/Products">here!</a></p>
+                    </div>
+                </div>
+                {% endif %}
+                {% if kw=="order" or kw=="" %}
+                <div class="accordion-item" id="question2">
+                    <a class="accordion-link" onclick="expandQ2()">
+                        How do I order my food?
+                        <ion-icon name="chevron-down-outline" id="down-icon2"></ion-icon>
+                        <ion-icon name="chevron-up-outline" id="up-icon2" style="display: none;"></ion-icon>
+                    </a>
+                    <div class="answer" id="expandQ2" style="display: none;">
+                        <p>You can go to the <a href="/Products">products page</a> and pick something you'd like to buy, and click on "Add to Cart". After selection,
+                        you can go to <a href="/cart">Your Cart</a> to place your order.</p>
+                    </div>
+                </div>
+                {% endif %}
+                {% if kw=="pay" or kw=="" %}
+                <div class="accordion-item" id="question3">
+                    <a class="accordion-link" onclick="expandQ3()">
+                        What payment methods are available?
+                        <ion-icon name="chevron-down-outline" id="down-icon3"></ion-icon>
+                        <ion-icon name="chevron-up-outline" id="up-icon3" style="display: none;"></ion-icon>
+                    </a>
+                    <div class="answer" id="expandQ3" style="display: none;">
+                        <p>Paypal, Credit & Debit Cards are accepted as methods of payment.</p>
+                    </div>
+                </div>
+                {% endif %}
+                {% if kw=="refund" or kw=="" %}
+                <div class="accordion-item" id="question4">
+                    <a class="accordion-link" onclick="expandQ4()">
+                        Can I get a refund or exchange for the food I ordered?
+                        <ion-icon name="chevron-down-outline" id="down-icon4"></ion-icon>
+                        <ion-icon name="chevron-up-outline" id="up-icon4" style="display: none;"></ion-icon>
+                    </a>
+                    <div class="answer" id="expandQ4" style="display: none;">
+                        <p>Yes, you can, but only if you have a valid reason. To file for a refund or exchange, please contact us through our email or contact number.</p>
+                    </div>
+                </div>
+                {% endif %}
+                {% if kw=="contact" or kw=="" %}
+                <div class="accordion-item" id="question5">
+                    <a class="accordion-link" onclick="expandQ5()">
+                        How can I contact ABC Restaurant?
+                        <ion-icon name="chevron-down-outline" id="down-icon5"></ion-icon>
+                        <ion-icon name="chevron-up-outline" id="up-icon5" style="display: none;"></ion-icon>
+                    </a>
+                    <div class="answer" id="expandQ5" style="display: none;">
+                        <p>Email: <a href="mailto:abcrestaurant4@gmail.com">abcrestaurant4@gmail.com</a>, Contact Number: +65 6789 0123</p>
+                    </div>
+                </div>
+                {% endif %}
+                {% if "not delivered" in kw or "wrong order" in kw or kw=="" %}
+
+                <div class="accordion-item" id="question6">
+                    <a class="accordion-link" onclick="expandQ6()">
+                        My food hasn't been delivered/is not what I ordered! What do I do?
+                        <ion-icon name="chevron-down-outline" id="down-icon6"></ion-icon>
+                        <ion-icon name="chevron-up-outline" id="up-icon6" style="display: none;"></ion-icon>
+                    </a>
+                    <div class="answer" id="expandQ6" style="display: none;">
+                        <p>Please contact us at this number with your wrong order: +65 6789 0123</p>
+                    </div>
+                </div>
+                {% endif %}
+                {% if "login" in kw or "register" in kw or kw=="" %}
+                <div class="accordion-item" id="question7">
+                    <a class="accordion-link" onclick="expandQ7()">
+                        How do I login/register my account?
+                        <ion-icon name="chevron-down-outline" id="down-icon7"></ion-icon>
+                        <ion-icon name="chevron-up-outline" id="up-icon7" style="display: none;"></ion-icon>
+                    </a>
+                    <div class="answer" id="expandQ7" style="display: none;">
+                        <p>You can Login <a href="/login">here</a> and Register <a href="/register">here</a>.</p>
+                    </div>
+                </div>
+                {% endif %}
+                <p>
+                    Can't find the answer to your question?
+                    <a href="/ContactUs">Send us an enquiry here instead!</a>
+                </p>
+
+            </div>
+        </div>
+    </section>
+<!--<script src="/static/js/FAQ.js"></script>-->
+</body>
+{% endblock %}

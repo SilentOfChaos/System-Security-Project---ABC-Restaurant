@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Review Product{% endblock %}
+
+{% block content %}
+<style>
+    .container {font-size: 1.3em;}
+    .image-cropper {
+        position: relative;
+        height: 160px;
+        width: 160px;
+        overflow: hidden;
+        border-radius: 50%;
+        margin: 20px;
+        display: flex;
+        justify-content: center;
+    }
+    img {
+      display: block;
+      margin: 0 auto;
+      height: 100%;
+      width: auto;
+    }
+    .label {
+        margin-right: 20px;
+    }
+</style>
+<body>
+{% if 'profile_updated' in session %}
+<div class="alert alert-success alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('profile_updated', None) }}
+</div>
+{% endif %}
+<h1 class="display-4">{{data["fname"]}} {{data["lname"]}}'s Profile</h1>
+<div class="container" style="border: 1px solid gray; margin-bottom: 20px;">
+    <div class="row">
+        <div class="col" style="margin: 20px;">
+            <div class="row">
+                <strong class="label">Full Name:</strong>
+                {{data["fname"]}} {{data["lname"]}}
+            </div>
+            <div class="row">
+                <strong class="label">Email Address:</strong>
+                {{ data["email"] }}
+            </div>
+            <div class="row">
+                <strong class="label">Gender:</strong>
+                {{ data["gender"] }}
+            </div>
+            <div class="row">
+                <strong class="label">User ID:</strong>
+                {{ data["id"] }}
+            </div>
+            <div class="row">
+                <a href="{{url_for('update_profile', id=data['id'])}}"><button class="btn btn-primary">Update Profile</button></a>
+            </div>
+        </div>
+        <div class="image-cropper" style="margin: 20px;">
+            <img src="static/img/avatars/{{data['avatar']}}">
+        </div>
+    </div>
+</div>
+</body>
+{% endblock %}

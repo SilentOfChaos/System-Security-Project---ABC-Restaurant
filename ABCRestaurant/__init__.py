@@ -42,8 +42,8 @@ app.secret_key = 'secret_key'
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 465
 app.config["MAIL_USE_SSL"] = True
-app.config["MAIL_USERNAME"] = 'securitproject2021@gmail.com'
-app.config["MAIL_PASSWORD"] = 'securityproject123'
+app.config["MAIL_USERNAME"] = 'securitprojXXXXXXXXXXX'
+app.config["MAIL_PASSWORD"] = 'XXXXXXXXXX'
 app.config['STRIPE PUBLIC KEY'] = 'pk_test_lfuZUTGObUfh7pa11TSt8CeA'
 app.config['STRIPE_SECRET_KEY'] = 'sk_test_51Bn3MVDe4uhAIaEt75dOEI0bOr2ZI2RVfKSdSAxvvVnWYyjEsPsX' \
                                   'm0BeU8WpKWTlNP82M7lKmd0GMAJL6umBRhh900DVMUFavT '
